@@ -7,6 +7,11 @@ class TodoContextProvider extends Component {
     super(props);
     this.state = {
       todo: [],
+      users: {
+        name: '',
+        email: '',
+        password: '',
+      },
     };
   }
 
