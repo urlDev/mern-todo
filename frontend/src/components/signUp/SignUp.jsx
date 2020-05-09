@@ -26,7 +26,7 @@ const SignUp = () => {
         </form>
       </SignInSignUpContainer>
       <>
-        <StyledLink to="/users/signin">Already have an account?</StyledLink>
+        <StyledLink to="/users">Already have an account?</StyledLink>
       </>
     </>
   );
