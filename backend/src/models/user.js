@@ -3,6 +3,8 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+const Task = require('../models/task');
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -36,6 +38,31 @@ const userSchema = new mongoose.Schema({
     },
   ],
 });
+
+// "tasks" can be any name
+userSchema.virtual('tasks', {
+  ref: 'Task',
+  // localfield is for user model/db. We save tasks with users _id
+  localField: '_id',
+  // foreignfield is for task model/db. Users are saved there as owner(can be any name)
+  foreignField: 'owner',
+});
+
+// we create a method on userSchema to show only email and name to the
+// so we dont expose important data here like password
+/* 
+about toJSON
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#toJSON_behavior
+*/
+userSchema.methods.toJSON = function () {
+  const user = this;
+  const userObject = user.toObject();
+
+  delete userObject.password;
+  delete userObject.tokens;
+
+  return userObject;
+};
 
 userSchema.methods.generateAuthToken = async function () {
   const user = this;
@@ -79,6 +106,14 @@ userSchema.pre('save', async function (next) {
   if (user.isModified('password')) {
     user.password = await bcrypt.hash(user.password, 8);
   }
+
+  next();
+});
+
+// delete tasks when user is removed
+userSchema.pre('remove', async function (next) {
+  const user = this;
+  await Task.deleteMany({ owner: user._id });
 
   next();
 });

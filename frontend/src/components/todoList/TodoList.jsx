@@ -6,7 +6,7 @@ import { TodoContext } from '../../Context';
 import { TodoContainer } from './TodoList.styles';
 
 const TodoList = () => {
-  const { todo, deleteTodo } = useContext(TodoContext);
+  const { todo, deleteTodo, getTodo, openModal } = useContext(TodoContext);
   return (
     <TodoContainer>
       {todo.length ? (
@@ -14,7 +14,15 @@ const TodoList = () => {
           return (
             <React.Fragment key={uuidv4()}>
               <p>
-                {task} <span onClick={() => deleteTodo(task)}>⤫</span>
+                <span
+                  onClick={() => {
+                    getTodo(task);
+                    openModal();
+                  }}
+                >
+                  {task}
+                </span>
+                <span onClick={() => deleteTodo(task)}>⤫</span>
               </p>
             </React.Fragment>
           );

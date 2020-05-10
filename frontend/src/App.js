@@ -7,6 +7,7 @@ import TodoContextProvider from './Context';
 import Nav from './components/nav/Nav';
 import Todo from './components/todo/Todo';
 import Users from './components/users/Users';
+import Modal from './components/modal/Modal';
 
 import { Container } from './App.styles';
 
@@ -34,6 +35,7 @@ function App() {
           </Switch>
         </Container>
       </div>
+      <Modal />
     </TodoContextProvider>
   );
 }

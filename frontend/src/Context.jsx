@@ -12,6 +12,7 @@ class TodoContextProvider extends Component {
         email: '',
         password: '',
       },
+      modalOpen: false,
     };
   }
 
@@ -31,6 +32,16 @@ class TodoContextProvider extends Component {
     });
   };
 
+  getTodo = (name) => {
+    console.log(name);
+  };
+
+  openModal = () => {
+    this.setState({
+      modalOpen: !this.state.modalOpen,
+    });
+  };
+
   render() {
     return (
       <TodoContext.Provider
@@ -38,6 +49,8 @@ class TodoContextProvider extends Component {
           ...this.state,
           addTodo: this.addTodo,
           deleteTodo: this.deleteTodo,
+          getTodo: this.getTodo,
+          openModal: this.openModal,
         }}
       >
         {this.props.children}
