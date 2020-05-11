@@ -3,7 +3,7 @@ const router = new express.Router();
 const auth = require('../middleware/auth');
 const Task = require('../models/task');
 
-router.post('/', auth, async (req, res) => {
+router.post('/', async (req, res) => {
   // we were first saving tasks from the req.body
   // const task = new Task(req.body);
 
@@ -13,7 +13,7 @@ router.post('/', auth, async (req, res) => {
   // then assigning owner as req.user
   const task = new Task({
     ...req.body,
-    owner: req.user._id,
+    // owner: req.user._id,
   });
 
   try {
@@ -24,16 +24,17 @@ router.post('/', auth, async (req, res) => {
   }
 });
 
-router.get('/', auth, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    // const tasks = await Task.find({});
+    const tasks = await Task.find({});
 
     // "tasks" comes from user model virtual.
     // populate and execPopulate are mongoose functions
     // populate(), which lets you reference documents in other collections.
     // execPopulate: Explicitly executes population and returns a promise.
-    await req.user.populate('tasks').execPopulate();
-    res.send(req.user.tasks);
+    // await req.user.populate('tasks').execPopulate();
+    // res.send(req.user.tasks);
+    res.send(tasks);
   } catch (error) {
     res.status(500).send(error);
   }
@@ -84,13 +85,13 @@ router.patch('/:id', auth, async (req, res) => {
   }
 });
 
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
-    // const task = await Task.findByIdAndDelete(req.params.id);
-    const task = await Task.findOneAndDelete({
-      _id: req.params.id,
-      owner: req.user._id,
-    });
+    const task = await Task.findByIdAndDelete(req.params.id);
+    // const task = await Task.findOneAndDelete({
+    //   _id: req.params.id,
+    //   owner: req.user._id,
+    // });
 
     if (!task) {
       return res.status(404).send({ Error: 'Task not found' });

@@ -20,9 +20,9 @@ const TodoList = () => {
                     openModal();
                   }}
                 >
-                  {task}
+                  {task.description}
                 </span>
-                <span onClick={() => deleteTodo(task)}>⤫</span>
+                <span onClick={() => deleteTodo(task._id)}>⤫</span>
               </p>
             </React.Fragment>
           );

@@ -24,19 +24,21 @@ const particleOptions = {
 
 function App() {
   return (
-    <TodoContextProvider>
+    <>
+      <TodoContextProvider>
+        <Nav />
+        <div className="container">
+          <Container>
+            <Switch>
+              <Route exact path="/" component={Todo} />
+              <Route path="/users" component={Users} />
+            </Switch>
+          </Container>
+        </div>
+        <Modal />
+      </TodoContextProvider>
       <Particles className="particles" params={particleOptions} />
-      <Nav />
-      <div className="container">
-        <Container>
-          <Switch>
-            <Route exact path="/" component={Todo} />
-            <Route path="/users" component={Users} />
-          </Switch>
-        </Container>
-      </div>
-      <Modal />
-    </TodoContextProvider>
+    </>
   );
 }
 

@@ -1,5 +1,5 @@
 import React, { Component, createContext } from 'react';
-
+import axios from 'axios';
 export const TodoContext = createContext();
 
 class TodoContextProvider extends Component {
@@ -10,30 +10,72 @@ class TodoContextProvider extends Component {
       users: {
         name: '',
         email: '',
-        password: '',
+        id: '',
       },
       modalOpen: false,
     };
   }
 
-  addTodo = (task) => {
+  componentDidMount() {
+    this.getAllTodos();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.users !== this.state.users) {
+      console.log(this.state.users);
+    }
+    // if (prevState.todo !== this.state.todo) {
+    //   return this.getAllTodos();
+    // }
+  }
+
+  addTodo = async (task) => {
+    const toDo = {
+      description: task,
+    };
+
     if (task.length) {
-      this.setState({
-        todo: [...this.state.todo, task],
-      });
+      try {
+        await axios.post('http://localhost:3001/', toDo);
+      } catch (error) {
+        console.log(error.message);
+      }
     }
   };
 
-  deleteTodo = (task) => {
-    const newTodo = [...this.state.todo];
-    newTodo.splice(this.state.todo.indexOf(task), 1);
-    this.setState({
-      todo: newTodo,
-    });
+  deleteTodo = async (id) => {
+    try {
+      await axios.delete(`http://localhost:3001/${id}`);
+      this.getAllTodos();
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   getTodo = (name) => {
     console.log(name);
+  };
+
+  getAllTodos = async () => {
+    try {
+      const response = await axios.get('http://localhost:3001/');
+      const data = response.data;
+      this.setState({
+        todo: data,
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  loadUser = (user) => {
+    this.setState({
+      users: {
+        name: user.name,
+        email: user.email,
+        id: user._id,
+      },
+    });
   };
 
   openModal = () => {
@@ -51,6 +93,8 @@ class TodoContextProvider extends Component {
           deleteTodo: this.deleteTodo,
           getTodo: this.getTodo,
           openModal: this.openModal,
+          loadUser: this.loadUser,
+          getAllTodos: this.getAllTodos,
         }}
       >
         {this.props.children}

@@ -18,7 +18,9 @@ code {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: calc(100vh - 126px);
+    min-height: calc(100vh - 126px - 126px);
+    /* border: 1px solid red; */
+    background: none;
 }
 
 .particles {
