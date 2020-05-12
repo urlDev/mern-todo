@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { TodoContext } from '../../Context';
 
-import { StyledNavLink, NavContainer } from './Nav.styles';
+import { StyledNavLink, NavContainer, LinkContainer } from './Nav.styles';
 
 const Nav = () => {
+  const { users, signOut } = useContext(TodoContext);
   return (
     <NavContainer>
-      <ul>
+      <LinkContainer>
+        {users.name && <button onClick={signOut}>Sign Out</button>}
         <StyledNavLink exact to="/">
           Tasks
         </StyledNavLink>
         <StyledNavLink to="/users">Profile</StyledNavLink>
-      </ul>
+      </LinkContainer>
     </NavContainer>
   );
 };

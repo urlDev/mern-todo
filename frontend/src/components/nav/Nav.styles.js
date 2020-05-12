@@ -15,13 +15,19 @@ export const NavContainer = styled.nav`
   display: flex;
   justify-content: flex-end;
   padding: 50px 100px 50px 0;
-  ul {
-    width: 200px;
-    display: flex;
-    justify-content: space-between;
+  a,
+  button {
     font-family: 'Raleway', sans-serif;
     font-size: 20px;
-    margin: 0;
+    margin: 0 0 0 75px;
     padding: 0;
   }
+  button {
+    color: #551a8b;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
 `;
+
+export const LinkContainer = styled.div``;

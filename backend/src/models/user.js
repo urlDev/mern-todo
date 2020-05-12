@@ -29,14 +29,14 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   // we add tokens to db so we can track when they login and logout
-  // tokens: [
-  //   {
-  //     token: {
-  //       type: String,
-  //       required: true,
-  //     },
-  //   },
-  // ],
+  tokens: [
+    {
+      token: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
 });
 
 // "tasks" can be any name
@@ -59,7 +59,6 @@ userSchema.methods.toJSON = function () {
   const userObject = user.toObject();
 
   delete userObject.password;
-  delete userObject.tokens;
 
   return userObject;
 };

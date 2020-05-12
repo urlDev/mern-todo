@@ -25,6 +25,7 @@ const SignUp = () => {
       );
       const { data } = await response;
       loadUser(data.user);
+      console.log(data);
     } catch (error) {
       console.log(error.message);
     }

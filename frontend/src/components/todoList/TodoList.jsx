@@ -2,11 +2,13 @@ import React, { useContext } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import { TodoContext } from '../../Context';
-
+import Modal from '../modal/Modal';
 import { TodoContainer } from './TodoList.styles';
 
 const TodoList = () => {
-  const { todo, deleteTodo, getTodo, openModal } = useContext(TodoContext);
+  const { todo, getTodo, deleteTodo, openModal, closeModal } = useContext(
+    TodoContext
+  );
   return (
     <TodoContainer>
       {todo.length ? (
@@ -16,14 +18,22 @@ const TodoList = () => {
               <p>
                 <span
                   onClick={() => {
-                    getTodo(task);
                     openModal();
+                    getTodo(task);
                   }}
                 >
                   {task.description}
                 </span>
-                <span onClick={() => deleteTodo(task._id)}>⤫</span>
+                <span
+                  onClick={() => {
+                    deleteTodo(task._id);
+                    closeModal();
+                  }}
+                >
+                  ⤫
+                </span>
               </p>
+              <Modal />
             </React.Fragment>
           );
         })

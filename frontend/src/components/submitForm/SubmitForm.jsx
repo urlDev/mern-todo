@@ -5,13 +5,12 @@ import { SubmitContainer } from './SubmitForm.styles';
 
 const SubmitForm = () => {
   const [task, setTask] = useState('');
-  const { addTodo, getAllTodos } = useContext(TodoContext);
+  const { addTodo } = useContext(TodoContext);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     addTodo(task);
     setTask('');
-    getAllTodos();
   };
 
   return (

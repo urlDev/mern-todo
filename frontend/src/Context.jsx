@@ -7,12 +7,14 @@ class TodoContextProvider extends Component {
     super(props);
     this.state = {
       todo: [],
+      oneTodo: {},
       users: {
         name: '',
         email: '',
         id: '',
       },
       modalOpen: false,
+      deleteUserModalOpen: false,
     };
   }
 
@@ -24,9 +26,6 @@ class TodoContextProvider extends Component {
     if (prevState.users !== this.state.users) {
       console.log(this.state.users);
     }
-    // if (prevState.todo !== this.state.todo) {
-    //   return this.getAllTodos();
-    // }
   }
 
   addTodo = async (task) => {
@@ -37,6 +36,7 @@ class TodoContextProvider extends Component {
     if (task.length) {
       try {
         await axios.post('http://localhost:3001/', toDo);
+        this.getAllTodos();
       } catch (error) {
         console.log(error.message);
       }
@@ -52,8 +52,23 @@ class TodoContextProvider extends Component {
     }
   };
 
-  getTodo = (name) => {
-    console.log(name);
+  updateTodo = async (task, id) => {
+    const toDo = {
+      description: task,
+    };
+
+    try {
+      await axios.patch(`http://localhost:3001/${id}`, toDo);
+      this.getAllTodos();
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  getTodo = (task) => {
+    this.setState({
+      oneTodo: task,
+    });
   };
 
   getAllTodos = async () => {
@@ -80,8 +95,51 @@ class TodoContextProvider extends Component {
 
   openModal = () => {
     this.setState({
-      modalOpen: !this.state.modalOpen,
+      modalOpen: true,
     });
+  };
+
+  closeModal = () => {
+    this.setState({
+      modalOpen: false,
+    });
+  };
+
+  openDeleteUserModal = () => {
+    this.setState({
+      deleteUserModalOpen: true,
+    });
+  };
+
+  closeDeleteUserModal = () => {
+    this.setState({
+      deleteUserModalOpen: false,
+    });
+  };
+
+  signOut = () => {
+    this.setState({
+      users: {
+        name: '',
+        email: '',
+        id: '',
+      },
+    });
+  };
+
+  deleteUser = async (id) => {
+    try {
+      await axios.delete(`http://localhost:3001/users/${id}`);
+      this.setState({
+        users: {
+          name: '',
+          email: '',
+          id: '',
+        },
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
   };
 
   render() {
@@ -91,10 +149,16 @@ class TodoContextProvider extends Component {
           ...this.state,
           addTodo: this.addTodo,
           deleteTodo: this.deleteTodo,
-          getTodo: this.getTodo,
           openModal: this.openModal,
+          closeModal: this.closeModal,
           loadUser: this.loadUser,
+          getTodo: this.getTodo,
           getAllTodos: this.getAllTodos,
+          updateTodo: this.updateTodo,
+          signOut: this.signOut,
+          deleteUser: this.deleteUser,
+          openDeleteUserModal: this.openDeleteUserModal,
+          closeDeleteUserModal: this.closeDeleteUserModal,
         }}
       >
         {this.props.children}

@@ -1,10 +1,21 @@
-import React, { useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { TodoContext } from '../../Context';
 
 import { ModalContainer } from './Modal.styles';
 import { HeaderContainer } from '../header/Header.styles';
+
 const Modal = () => {
-  const { modalOpen, openModal } = useContext(TodoContext);
+  const [task, setTask] = useState('');
+  const { modalOpen, closeModal, updateTodo, oneTodo } = useContext(
+    TodoContext
+  );
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    updateTodo(task, oneTodo._id);
+    closeModal();
+  };
+
   return (
     <>
       {modalOpen && (
@@ -16,13 +27,18 @@ const Modal = () => {
               justifyContent: 'space-between',
             }}
           >
-            <h1>Update your to-do</h1>
-            <span style={{ cursor: 'pointer' }} onClick={openModal}>
+            <h1>{oneTodo.description}</h1>
+            <span style={{ cursor: 'pointer' }} onClick={closeModal}>
               ⤫
             </span>
           </HeaderContainer>
-          <form action="">
-            <input type="text" placeholder="Enter your todo" />
+          <form onSubmit={handleSubmit}>
+            <input
+              type="text"
+              placeholder="How do you want to update it?"
+              value={task}
+              onChange={(e) => setTask(e.target.value)}
+            />
             <button type="submit">Update</button>
           </form>
         </ModalContainer>
