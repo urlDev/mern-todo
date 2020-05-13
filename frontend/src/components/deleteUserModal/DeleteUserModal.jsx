@@ -1,4 +1,6 @@
 import React, { useContext } from 'react';
+import { useHistory } from 'react-router-dom';
+
 import { TodoContext } from '../../Context';
 
 import { DeleteUserModalContainer } from './DeleteUserModal.styles';
@@ -10,6 +12,7 @@ const DeleteUserModal = () => {
     users,
     deleteUser,
   } = useContext(TodoContext);
+  let history = useHistory();
   return (
     <>
       {deleteUserModalOpen && (
@@ -26,14 +29,30 @@ const DeleteUserModal = () => {
               ⤫
             </span>
           </div>
-          <button
-            onClick={() => {
-              deleteUser(users.id);
-              closeDeleteUserModal();
+          <div
+            style={{
+              width: '300px',
+              display: 'flex',
+              marginLeft: 'auto',
+              justifyContent: 'space-between',
             }}
           >
-            Delete account
-          </button>
+            <button
+              style={{ cursor: 'pointer' }}
+              onClick={closeDeleteUserModal}
+            >
+              Cancel
+            </button>
+            <button
+              onClick={() => {
+                deleteUser(users.id);
+                closeDeleteUserModal();
+                history.push('/users');
+              }}
+            >
+              Delete account
+            </button>
+          </div>
         </DeleteUserModalContainer>
       )}
     </>

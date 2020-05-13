@@ -19,7 +19,7 @@ export const DeleteUserModalContainer = styled.div`
     font-family: 'Josefin Sans', sans-serif;
   }
   button {
-    background: red;
+    background: none;
     border-radius: 3px;
     width: 100%;
     color: white;
@@ -27,5 +27,9 @@ export const DeleteUserModalContainer = styled.div`
     border: none;
     padding: 10px;
     cursor: pointer;
+  }
+
+  button ~ button {
+    background: red;
   }
 `;

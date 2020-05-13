@@ -1,13 +1,17 @@
 import React, { useState, useContext } from 'react';
-import { TodoContext } from '../../Context';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
+
+import { TodoContext } from '../../Context';
 
 import { SignInSignUpContainer, StyledLink } from '../signIn/SignIn.styles';
 import { HeaderContainer } from '../header/Header.styles';
 
 const SignUp = () => {
   const [input, setInput] = useState({});
-  const { loadUser } = useContext(TodoContext);
+  const { loadUser, getAllTodos } = useContext(TodoContext);
+
+  let history = useHistory();
 
   const handleChange = (e) =>
     setInput({
@@ -24,8 +28,12 @@ const SignUp = () => {
         input
       );
       const { data } = await response;
+      const lastToken = data.user.tokens.pop();
+      localStorage.setItem('user', JSON.stringify(data.user));
+      localStorage.setItem('userToken', JSON.stringify(lastToken.token));
       loadUser(data.user);
-      console.log(data);
+      getAllTodos();
+      history.push('/users/me');
     } catch (error) {
       console.log(error.message);
     }

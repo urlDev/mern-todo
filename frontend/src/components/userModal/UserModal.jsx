@@ -25,12 +25,20 @@ const UserModal = () => {
       password: input.password,
     };
 
+    const token = localStorage.getItem('userToken').slice(1, -1);
+    const config = {
+      headers: { Authorization: `Bearer ${token}` },
+    };
+
     try {
       const response = await axios.patch(
-        `http://localhost:3001/users/${users.id}`,
-        userData
+        `http://localhost:3001/users`,
+        userData,
+        config
       );
       const { data } = await response;
+      localStorage.removeItem('user');
+      localStorage.setItem('user', JSON.stringify(data));
       loadUser(data);
       closeModal();
     } catch (error) {

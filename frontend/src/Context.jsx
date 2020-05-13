@@ -1,5 +1,6 @@
 import React, { Component, createContext } from 'react';
 import axios from 'axios';
+
 export const TodoContext = createContext();
 
 class TodoContextProvider extends Component {
@@ -19,12 +20,14 @@ class TodoContextProvider extends Component {
   }
 
   componentDidMount() {
-    this.getAllTodos();
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.users !== this.state.users) {
-      console.log(this.state.users);
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      this.setState(
+        {
+          users: user,
+        },
+        () => this.getAllTodos()
+      );
     }
   }
 
@@ -32,10 +35,15 @@ class TodoContextProvider extends Component {
     const toDo = {
       description: task,
     };
+    const token =
+      this.state.users.name && localStorage.getItem('userToken').slice(1, -1);
+    const config = {
+      headers: { Authorization: `Bearer ${token}` },
+    };
 
     if (task.length) {
       try {
-        await axios.post('http://localhost:3001/', toDo);
+        await axios.post('http://localhost:3001/', toDo, config);
         this.getAllTodos();
       } catch (error) {
         console.log(error.message);
@@ -44,8 +52,14 @@ class TodoContextProvider extends Component {
   };
 
   deleteTodo = async (id) => {
+    const token =
+      this.state.users.name && localStorage.getItem('userToken').slice(1, -1);
+    const config = {
+      headers: { Authorization: `Bearer ${token}` },
+    };
+
     try {
-      await axios.delete(`http://localhost:3001/${id}`);
+      await axios.delete(`http://localhost:3001/${id}`, config);
       this.getAllTodos();
     } catch (error) {
       console.log(error.message);
@@ -57,8 +71,14 @@ class TodoContextProvider extends Component {
       description: task,
     };
 
+    const token =
+      this.state.users.name && localStorage.getItem('userToken').slice(1, -1);
+    const config = {
+      headers: { Authorization: `Bearer ${token}` },
+    };
+
     try {
-      await axios.patch(`http://localhost:3001/${id}`, toDo);
+      await axios.patch(`http://localhost:3001/${id}`, toDo, config);
       this.getAllTodos();
     } catch (error) {
       console.log(error.message);
@@ -72,8 +92,14 @@ class TodoContextProvider extends Component {
   };
 
   getAllTodos = async () => {
+    const token =
+      this.state.users.name && localStorage.getItem('userToken').slice(1, -1);
+    const config = {
+      headers: { Authorization: `Bearer ${token}` },
+    };
+
     try {
-      const response = await axios.get('http://localhost:3001/');
+      const response = await axios.get('http://localhost:3001/', config);
       const data = response.data;
       this.setState({
         todo: data,
@@ -117,26 +143,44 @@ class TodoContextProvider extends Component {
     });
   };
 
-  signOut = () => {
+  signOut = async () => {
+    const token = localStorage.getItem('userToken').slice(1, -1);
+    const config = {
+      headers: { Authorization: `Bearer ${token}` },
+    };
+
+    try {
+      await axios.post('http://localhost:3001/users/me', null, config);
+    } catch (error) {
+      console.log(error.message);
+    }
     this.setState({
       users: {
         name: '',
         email: '',
         id: '',
       },
+      todo: [],
     });
+    localStorage.clear();
   };
 
-  deleteUser = async (id) => {
+  deleteUser = async () => {
+    const token = localStorage.getItem('userToken').slice(1, -1);
+    const config = {
+      headers: { Authorization: `Bearer ${token}` },
+    };
     try {
-      await axios.delete(`http://localhost:3001/users/${id}`);
+      await axios.delete(`http://localhost:3001/users`, config);
       this.setState({
         users: {
           name: '',
           email: '',
           id: '',
         },
+        todo: [],
       });
+      localStorage.clear();
     } catch (error) {
       console.log(error.message);
     }

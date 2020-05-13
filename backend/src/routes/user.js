@@ -24,25 +24,24 @@ router.post('/users', async (req, res) => {
       req.body.email,
       req.body.password
     );
-    // const token = await user.generateAuthToken();
+    const token = await user.generateAuthToken();
 
-    res.send({ user });
+    res.send({ user, token });
   } catch (error) {
     res.status(400).send();
   }
 });
 
 // logout
-router.post('/users/logout', auth, async (req, res) => {
+router.post('/users/me', auth, async (req, res) => {
   try {
     req.user.tokens = req.user.tokens.filter(
       (token) => token.token !== req.token
     );
     await req.user.save();
-
     res.send();
   } catch (error) {
-    res.status(500).send();
+    res.status(500).send;
   }
 });
 
@@ -64,7 +63,7 @@ router.get('/users', auth, async (req, res) => {
 });
 
 // update
-router.patch('/users/:id', async (req, res) => {
+router.patch('/users', auth, async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ['name', 'email', 'password'];
   const isValid = updates.every((update) => allowedUpdates.includes(update));
@@ -86,9 +85,9 @@ router.patch('/users/:id', async (req, res) => {
 
     // we no longer need to get the user by id because user can only delete him/her self
     // which means we already have a user which is req.user coming from express middleware:auth.js
-    const user = await User.findById(req.params.id);
+    // const user = await User.findById(req.params.id);
 
-    // const user = req.user;
+    const user = req.user;
 
     updates.forEach((update) => (user[update] = req.body[update]));
 
@@ -100,12 +99,12 @@ router.patch('/users/:id', async (req, res) => {
 });
 
 // delete
-router.delete('/users/:id', async (req, res) => {
+router.delete('/users', auth, async (req, res) => {
   try {
-    const user = await User.findByIdAndDelete(req.params.id);
-    // await req.user.remove();
+    // const user = await User.findByIdAndDelete(req.params.id);
+    await req.user.remove();
 
-    res.send(user);
+    res.send(req.user);
   } catch (error) {
     res.status(500).send();
   }
