@@ -66,7 +66,7 @@ userSchema.methods.toJSON = function () {
 userSchema.methods.generateAuthToken = async function () {
   const user = this;
 
-  const token = jwt.sign({ _id: user._id.toString() }, 'mern-todo');
+  const token = jwt.sign({ _id: user._id.toString() }, process.env.JWT_SECRET);
 
   // we are adding new token value to tokens array and saving it to existing tokens arr
   user.tokens = user.tokens.concat({ token });

@@ -3,6 +3,8 @@ import { TodoContext } from '../../Context';
 
 import { ModalContainer } from './Modal.styles';
 import { HeaderContainer } from '../header/Header.styles';
+import { Button } from '../button/Button.styles';
+import { Input } from '../form/Form.styles';
 
 const Modal = () => {
   const [task, setTask] = useState('');
@@ -33,13 +35,14 @@ const Modal = () => {
             </span>
           </HeaderContainer>
           <form onSubmit={handleSubmit}>
-            <input
+            <Input
               type="text"
               placeholder="How do you want to update it?"
+              placeholderTextColor="white"
               value={task}
               onChange={(e) => setTask(e.target.value)}
             />
-            <button type="submit">Update</button>
+            <Button type="submit">Update</Button>
           </form>
         </ModalContainer>
       )}

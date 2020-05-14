@@ -2,6 +2,9 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Particles from 'react-particles-js';
 
+import 'react-notifications/lib/notifications.css';
+import { NotificationContainer } from 'react-notifications';
+
 import TodoContextProvider from './Context';
 
 import Nav from './components/nav/Nav';
@@ -36,6 +39,7 @@ function App() {
         </div>
       </TodoContextProvider>
       <Particles className="particles" params={particleOptions} />
+      <NotificationContainer />
     </>
   );
 }

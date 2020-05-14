@@ -15,6 +15,9 @@ export const NavContainer = styled.nav`
   display: flex;
   justify-content: flex-end;
   padding: 50px 100px 50px 0;
+  width: 100%;
+  position: absolute;
+  z-index: 1;
   a,
   button {
     font-family: 'Raleway', sans-serif;

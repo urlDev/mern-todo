@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 mongoose.connect(
-  'mongodb://127.0.0.1/mern-todo',
+  process.env.MONGODB_URL,
   {
     useNewUrlParser: true,
     useCreateIndex: true,

@@ -32,16 +32,4 @@ export const ModalContainer = styled.div`
       outline: none;
     }
   }
-
-  button {
-    cursor: pointer;
-    width: 90px;
-    height: 30px;
-    background: rgba(176, 174, 225, 1);
-    border: none;
-    color: white;
-    border-radius: 3px;
-    font-family: 'Raleway', sans-serif;
-    font-weight: bold;
-  }
 `;

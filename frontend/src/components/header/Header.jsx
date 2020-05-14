@@ -9,7 +9,9 @@ const Header = () => {
 
   return (
     <HeaderContainer>
-      <h1>You have {todo.length} to-do</h1>
+      <h1>
+        You have {todo && todo.length} {todo.length > 1 ? 'to-dos' : 'to-do'}
+      </h1>
     </HeaderContainer>
   );
 };

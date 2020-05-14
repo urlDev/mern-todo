@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import { Button } from '../button/Button.styles';
+
 export const UsersContainer = styled.div`
   font-family: 'Josefin Sans', sans-serif;
   color: #047581;
@@ -11,20 +13,12 @@ export const UsersContainer = styled.div`
     text-align: center;
   }
 
-  button {
-    margin: 0 auto 15px auto;
-    width: 200px;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    background: rgba(176, 174, 225, 1);
-    color: white;
-    padding: 10px;
-    font-family: 'Raleway', sans-serif;
-    font-weight: bold;
-  }
-
   button ~ button {
     background: red;
   }
+`;
+
+export const StyledButton = styled(Button)`
+  width: 200px;
+  margin: 0 auto 15px auto;
 `;

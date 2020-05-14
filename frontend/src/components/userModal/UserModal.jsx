@@ -2,6 +2,8 @@ import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import { TodoContext } from '../../Context';
 
+import { NotificationManager } from 'react-notifications';
+
 import { HeaderContainer } from '../header/Header.styles';
 import { UserModalContainer } from './UserModal.styles';
 
@@ -41,6 +43,7 @@ const UserModal = () => {
       localStorage.setItem('user', JSON.stringify(data));
       loadUser(data);
       closeModal();
+      NotificationManager.success('Account has been updated', 'Successful!');
     } catch (error) {
       console.log(error.message);
     }

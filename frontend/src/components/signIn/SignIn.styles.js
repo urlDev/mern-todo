@@ -32,16 +32,8 @@ export const SignInSignUpContainer = styled.div`
     }
   }
 
-  button {
-    cursor: pointer;
-    width: 110px;
-    background: rgba(176, 174, 225, 1);
-    border: none;
-    color: white;
-    padding: 10px;
-    border-radius: 3px;
-    font-family: 'Raleway', sans-serif;
-    font-weight: bold;
+  input ~ input {
+    margin-bottom: 30px;
   }
 `;
 

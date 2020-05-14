@@ -2,14 +2,19 @@ import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
+import { NotificationManager } from 'react-notifications';
+
 import { TodoContext } from '../../Context';
 
 import { SignInSignUpContainer, StyledLink } from '../signIn/SignIn.styles';
 import { HeaderContainer } from '../header/Header.styles';
+import { Button } from '../button/Button.styles';
 
 const SignUp = () => {
   const [input, setInput] = useState({});
-  const { loadUser, getAllTodos } = useContext(TodoContext);
+  const { loadUser, getAllTodos, addTodoFromLocalStorageToDb } = useContext(
+    TodoContext
+  );
 
   let history = useHistory();
 
@@ -32,9 +37,12 @@ const SignUp = () => {
       localStorage.setItem('user', JSON.stringify(data.user));
       localStorage.setItem('userToken', JSON.stringify(lastToken.token));
       loadUser(data.user);
+      addTodoFromLocalStorageToDb();
       getAllTodos();
       history.push('/users/me');
+      NotificationManager.success('Signed up successfully!', 'Welcome!');
     } catch (error) {
+      NotificationManager.error("Couldn't sign-up, please try again", 'Error!');
       console.log(error.message);
     }
   };
@@ -49,7 +57,6 @@ const SignUp = () => {
           <label htmlFor="name">Name</label>
           <input
             type="text"
-            id="name"
             name="name"
             placeholder="Name"
             onChange={handleChange}
@@ -59,7 +66,6 @@ const SignUp = () => {
           <input
             type="email"
             name="email"
-            id="signin-email"
             placeholder="Email"
             onChange={handleChange}
             required
@@ -68,12 +74,14 @@ const SignUp = () => {
           <input
             type="password"
             name="password"
-            id="signup-password"
             placeholder="Password"
             onChange={handleChange}
             required
           />
-          <button type="submit"> Sign Up </button>
+          <Button style={{ width: '110px' }} type="submit">
+            {' '}
+            Sign Up{' '}
+          </Button>
         </form>
       </SignInSignUpContainer>
       <>

@@ -3,21 +3,20 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { TodoContext } from '../../Context';
 import Modal from '../modal/Modal';
-import { TodoContainer } from './TodoList.styles';
+import { TodoContainer } from '../todoList/TodoList.styles';
 
-const TodoList = () => {
+const UserTodoList = () => {
   const {
     users,
     todo,
     getTodo,
     deleteTodo,
-    deleteTodoWithoutUser,
     openModal,
     closeModal,
   } = useContext(TodoContext);
   return (
     <TodoContainer>
-      {todo && todo.length ? (
+      {todo.length ? (
         todo.map((task) => {
           return (
             <React.Fragment key={uuidv4()}>
@@ -32,9 +31,7 @@ const TodoList = () => {
                 </span>
                 <span
                   onClick={() => {
-                    users.name
-                      ? deleteTodo(task._id)
-                      : deleteTodoWithoutUser(task);
+                    deleteTodo(task._id);
                     closeModal();
                   }}
                 >
@@ -52,4 +49,4 @@ const TodoList = () => {
   );
 };
 
-export default TodoList;
+export default UserTodoList;

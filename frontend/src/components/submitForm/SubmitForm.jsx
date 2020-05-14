@@ -2,6 +2,8 @@ import React, { useContext, useState } from 'react';
 import { TodoContext } from '../../Context';
 
 import { SubmitContainer } from './SubmitForm.styles';
+import { Button } from '../button/Button.styles';
+import { Input } from '../form/Form.styles';
 
 const SubmitForm = () => {
   const [task, setTask] = useState('');
@@ -15,14 +17,14 @@ const SubmitForm = () => {
 
   return (
     <SubmitContainer>
-      <form action="" onSubmit={handleSubmit}>
-        <input
+      <form onSubmit={handleSubmit}>
+        <Input
           type="text"
           placeholder="Enter your todo"
           value={task}
           onChange={(e) => setTask(e.target.value)}
         />
-        <button type="submit">Add</button>
+        <Button type="submit">Add</Button>
       </form>
     </SubmitContainer>
   );

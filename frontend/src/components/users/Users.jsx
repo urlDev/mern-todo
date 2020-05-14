@@ -1,13 +1,14 @@
 import React, { useContext } from 'react';
-import { TodoContext } from '../../Context';
 import { Switch, Route } from 'react-router-dom';
+
+import { TodoContext } from '../../Context';
 
 import SignIn from '../signIn/SignIn';
 import SignUp from '../signUp/SignUp';
 import UserModal from '../userModal/UserModal';
 import DeleteUserModal from '../deleteUserModal/DeleteUserModal';
 
-import { UsersContainer } from './Users.styles';
+import { UsersContainer, StyledButton } from './Users.styles';
 
 const Users = () => {
   const { users, openModal, openDeleteUserModal } = useContext(TodoContext);
@@ -17,8 +18,10 @@ const Users = () => {
         <UsersContainer>
           <h1>Welcome {users.name}!</h1>
 
-          <button onClick={openModal}>Update account</button>
-          <button onClick={openDeleteUserModal}>Delete account</button>
+          <StyledButton onClick={openModal}>Update account</StyledButton>
+          <StyledButton onClick={openDeleteUserModal}>
+            Delete account
+          </StyledButton>
         </UsersContainer>
       ) : (
         <Switch>

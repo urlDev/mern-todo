@@ -1,6 +1,8 @@
 import React, { Component, createContext } from 'react';
 import axios from 'axios';
 
+import { NotificationManager } from 'react-notifications';
+
 export const TodoContext = createContext();
 
 class TodoContextProvider extends Component {
@@ -21,15 +23,54 @@ class TodoContextProvider extends Component {
 
   componentDidMount() {
     const user = JSON.parse(localStorage.getItem('user'));
+    const task = JSON.parse(localStorage.getItem('todo'));
+
+    if (task) {
+      this.setState({
+        todo: task,
+      });
+    }
+
     if (user) {
       this.setState(
         {
           users: user,
         },
-        () => this.getAllTodos()
+        () => {
+          this.getAllTodos();
+        }
       );
     }
   }
+
+  addTodoFromLocalStorageToDb = () => {
+    const token =
+      this.state.users.name && localStorage.getItem('userToken').slice(1, -1);
+    const config = {
+      headers: { Authorization: `Bearer ${token}` },
+    };
+    const { todo } = this.state;
+
+    try {
+      todo &&
+        todo.map(async (task) => {
+          const toDo = {
+            description: task,
+          };
+          await axios.post('http://localhost:3001/', toDo, config);
+          this.setState(
+            {
+              todo: [],
+            },
+            () => {
+              localStorage.removeItem('todo');
+            }
+          );
+        });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   addTodo = async (task) => {
     const toDo = {
@@ -40,13 +81,27 @@ class TodoContextProvider extends Component {
     const config = {
       headers: { Authorization: `Bearer ${token}` },
     };
-
-    if (task.length) {
-      try {
-        await axios.post('http://localhost:3001/', toDo, config);
-        this.getAllTodos();
-      } catch (error) {
-        console.log(error.message);
+    if (this.state.users.name) {
+      if (task.length) {
+        try {
+          await axios.post('http://localhost:3001/', toDo, config);
+          this.getAllTodos();
+          NotificationManager.success('A new to-do added!', 'Successful!');
+        } catch (error) {
+          console.log(error.message);
+        }
+      }
+    } else {
+      if (task.length) {
+        this.setState(
+          {
+            todo: [...this.state.todo, task],
+          },
+          () => {
+            localStorage.setItem('todo', JSON.stringify(this.state.todo));
+          }
+        );
+        NotificationManager.success('A new to-do added!', 'Successful!');
       }
     }
   };
@@ -61,9 +116,26 @@ class TodoContextProvider extends Component {
     try {
       await axios.delete(`http://localhost:3001/${id}`, config);
       this.getAllTodos();
+      NotificationManager.success('To-do deleted', 'Successful!');
     } catch (error) {
       console.log(error.message);
     }
+  };
+
+  deleteTodoWithoutUser = (task) => {
+    const newTodo = [...this.state.todo];
+    newTodo.splice(this.state.todo.indexOf(task), 1);
+    this.setState({
+      todo: newTodo,
+    });
+
+    const localStorageTodo = JSON.parse(localStorage.getItem('todo'));
+    const temp = [...localStorageTodo];
+    temp.splice(localStorageTodo.indexOf(task), 1);
+    localStorage.removeItem('todo');
+    localStorage.setItem('todo', JSON.stringify(temp));
+
+    NotificationManager.success('To-do deleted', 'Successful!');
   };
 
   updateTodo = async (task, id) => {
@@ -80,6 +152,7 @@ class TodoContextProvider extends Component {
     try {
       await axios.patch(`http://localhost:3001/${id}`, toDo, config);
       this.getAllTodos();
+      NotificationManager.success('To-do updated', 'Successful!');
     } catch (error) {
       console.log(error.message);
     }
@@ -192,6 +265,7 @@ class TodoContextProvider extends Component {
         value={{
           ...this.state,
           addTodo: this.addTodo,
+          deleteTodoWithoutUser: this.deleteTodoWithoutUser,
           deleteTodo: this.deleteTodo,
           openModal: this.openModal,
           closeModal: this.closeModal,
@@ -203,6 +277,7 @@ class TodoContextProvider extends Component {
           deleteUser: this.deleteUser,
           openDeleteUserModal: this.openDeleteUserModal,
           closeDeleteUserModal: this.closeDeleteUserModal,
+          addTodoFromLocalStorageToDb: this.addTodoFromLocalStorageToDb,
         }}
       >
         {this.props.children}
