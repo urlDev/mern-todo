@@ -28,6 +28,7 @@ export const StyledLink = styled(Link)`
   text-decoration: none;
   text-align: center;
   margin: 20px 0;
+  color: #551a8b;
   :active,
   :focus,
   :hover {

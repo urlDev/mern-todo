@@ -20,9 +20,11 @@ const SubmitForm = () => {
       <form onSubmit={handleSubmit}>
         <Input
           type="text"
+          name="todo"
           placeholder="Enter your todo"
           value={task}
           onChange={(e) => setTask(e.target.value)}
+          required
         />
         <Button>Add</Button>
       </form>

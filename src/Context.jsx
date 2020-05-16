@@ -156,7 +156,7 @@ class TodoContextProvider extends Component {
       }
     } else {
       const temp = [...this.state.todo];
-      temp.splice(this.state.todo.indexOf(task), 1);
+      temp.splice(this.state.todo.indexOf(this.state.oneTodo), 1);
       this.setState(
         {
           todo: [...temp, task],
