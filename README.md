@@ -1,5 +1,7 @@
 # Mern - Todo
-A to-do app made with React, Hooks, Context, MongoDB, Node, Express, Jest, JWT
+A to-do app made with React, Hooks, Context, MongoDB, Node, Express, Jest, JWT. 
+
+Check out my portfolio website to see project [live](https://can-ural.com/projects/todo) as well!
 
 ## React
 About React, I used Context and Hooks.
